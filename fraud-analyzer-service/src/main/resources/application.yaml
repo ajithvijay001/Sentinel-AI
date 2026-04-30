@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: fraud-analyzer-service
+  ai:
+    google:
+      genai:
+        api-key: ""
+        project-id: ""
+        chat: 
+          options:
+           safety-settings:
+           - category: HARM_CATEGORY_DANGEROUS_CONTENT
+             threshold: BLOCK_NONE
+           - category: HARM_CATEGORY_HARASSMENT
+             threshold: BLOCK_NONE
+           - category: HARM_CATEGORY_HATE_SPEECH
+             threshold: BLOCK_NONE
+           - category: HARM_CATEGORY_SEXUALLY_EXPLICIT
+             threshold: BLOCK_NONE
+           model: gemini-2.5-flash
+           thinkingBudget: 0
+server:
+  port: 8081
+logging:
+  level:
+    org.springframework.ai.chat.client.advisor: DEBUG
