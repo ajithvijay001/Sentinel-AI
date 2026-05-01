@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  kafka:
+    image: apache/kafka:latest
+    container_name: sentinel-kafka
+    ports:
+      - "9092:9092"
+    environment:
+      # --- REQUIRED FOR STARTUP ---
+      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk' # Any unique base64 string
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      
+      # --- NETWORKING ---
+      KAFKA_LISTENERS: 'PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://127.0.0.1:9092'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@127.0.0.1:9093'
+      
+      # --- STABILITY ---
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'

@@ -1,4 +1,4 @@
-package com.sentinelai.transaction_service;
+package com.sentinelai.transactionservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

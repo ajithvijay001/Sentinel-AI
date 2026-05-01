@@ -1,7 +1,6 @@
 package com.sentinelai.fraudanalyzerservice.service;
 
 import java.math.BigDecimal;
-import java.util.logging.Logger;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -13,8 +12,8 @@ import org.springframework.stereotype.Service;
 import com.sentinelai.fraudanalyzerservice.model.FraudCheckResponse;
 import com.sentinelai.fraudanalyzerservice.model.dto.TransactionRequest;
 import com.sentinelai.fraudanalyzerservice.model.enums.FraudVerdict;
-
-import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class FraudAnalysisService {
@@ -39,7 +38,7 @@ public class FraudAnalysisService {
 		String jsonRequest = objectMapper.writeValueAsString(request);
 		
 		var converter = new BeanOutputConverter<>(FraudCheckResponse.class);
-		// handle rate limit checks.
+		// handle rate limit checks in future
 		return chatClient.prompt()
 				.system(sp->sp.text(fraudPromptResource)
 						.param("format", converter.getFormat())
@@ -52,6 +51,9 @@ public class FraudAnalysisService {
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			return getFallbackResponse("System encountered an error during AI analysis. Manual review is required.");
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return getFallbackResponse("System encountered an error while processing request to json");
 		}
 	}
 	

@@ -15,10 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//NOTE: use an ENUM for the AI's data to allow or block a transaction.
 @Data
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionRequest {
