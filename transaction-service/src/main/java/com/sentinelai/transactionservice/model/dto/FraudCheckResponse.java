@@ -22,4 +22,6 @@ public class FraudCheckResponse {
 	private FraudVerdict verdict;
 	
 	private String reason;
+	
+	private String transactionId;
 }

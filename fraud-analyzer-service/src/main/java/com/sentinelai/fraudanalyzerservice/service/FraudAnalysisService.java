@@ -50,18 +50,19 @@ public class FraudAnalysisService {
 				.entity(converter);
 		} catch (RuntimeException e) {
 			e.printStackTrace();
-			return getFallbackResponse("System encountered an error during AI analysis. Manual review is required.");
+			return getFallbackResponse("System encountered an error during AI analysis. Manual review is required.", request.getTransactionId());
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-			return getFallbackResponse("System encountered an error while processing request to json");
+			return getFallbackResponse("System encountered an error while processing request to json", request.getTransactionId());
 		}
 	}
 	
-	private FraudCheckResponse getFallbackResponse(String message) {
+	private FraudCheckResponse getFallbackResponse(String message, String transactionId) {
 	    return new FraudCheckResponse(
 	        new BigDecimal("0.5"),      
 	        FraudVerdict.FLAGGED, 
-	        message                    
+	        message,
+	        transactionId
 	    );
 	}
 

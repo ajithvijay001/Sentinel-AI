@@ -1,6 +1,7 @@
 package com.sentinelai.fraudanalyzerservice.consumer;
 
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.sentinelai.fraudanalyzerservice.model.FraudCheckResponse;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TransactionConsumer {
 	private final FraudAnalysisService fraudAnalysisService;
 
+	private final KafkaTemplate<String, FraudCheckResponse> kafkaTemplate;
 	@KafkaListener(
 	        topics = "transaction-events", 
 	        groupId = "fraud-analyzer-group"
@@ -25,7 +27,9 @@ public class TransactionConsumer {
 	        
 	        FraudCheckResponse result = fraudAnalysisService.analyzeWithAI(request);
 	        
-	        log.info("Analysis complete for {}. Verdict: {}", request.getTransactionId(), result.getVerdict());
-	        //send back the response to the transaction service to proceed with next step based on the verdict.
+	        result.setTransactionId(request.getTransactionId());
+	        kafkaTemplate.send("fraud-results", result.getTransactionId(), result);
+	        log.info("Sent result back for: {}", result.getTransactionId());
+	        
 	    }
 }
