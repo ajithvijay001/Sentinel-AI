@@ -2,7 +2,7 @@
 # 1. PROJECT SPECIFIC (Infrastructure & Secrets)
 # =================================================================
 # Protect your AI API keys and DB credentials
-infrastructure/docker-compose/.env
+infrastructure/.env
 
 # Protect your local SQL data from being uploaded
 infrastructure/docker-compose/postgres_data/
