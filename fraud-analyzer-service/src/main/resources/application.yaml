@@ -19,8 +19,8 @@ spring:
   ai:
     google:
       genai:
-        api-key: ""
-        project-id: ""
+        api-key: ${API-KEY}
+        project-id: ${PROJECT-ID}
         chat: 
           options:
            safety-settings:

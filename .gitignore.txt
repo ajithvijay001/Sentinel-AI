@@ -1,0 +1,48 @@
+# =================================================================
+# 1. PROJECT SPECIFIC (Infrastructure & Secrets)
+# =================================================================
+# Protect your AI API keys and DB credentials
+infrastructure/docker-compose/.env
+
+# Protect your local SQL data from being uploaded
+infrastructure/docker-compose/postgres_data/
+
+# =================================================================
+# 2. JAVA / MAVEN (Applies to all services)
+# =================================================================
+**/target/
+**/.mvn/wrapper/maven-wrapper.jar
+**/build/
+HELP.md
+
+# =================================================================
+# 3. IDEs & EDITORS (Global Junk)
+# =================================================================
+# IntelliJ
+**/.idea/
+*.iws
+*.iml
+*.ipr
+
+# Eclipse / STS
+**/.apt_generated
+**/.classpath
+**/.factorypath
+**/.project
+**/.settings
+**/.springBeans
+**/.sts4-cache
+
+# VS Code
+**/.vscode/
+
+# NetBeans
+**/nbproject/private/
+**/nbbuild/
+**/dist/
+**/nbdist/
+**/.nb-gradle/
+
+# OS specific
+.DS_Store
+Thumbs.db
