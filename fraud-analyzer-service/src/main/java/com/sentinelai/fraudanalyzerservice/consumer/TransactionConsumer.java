@@ -1,11 +1,13 @@
 package com.sentinelai.fraudanalyzerservice.consumer;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.sentinelai.fraudanalyzerservice.model.FraudCheckResponse;
 import com.sentinelai.fraudanalyzerservice.model.dto.TransactionRequest;
+import com.sentinelai.fraudanalyzerservice.producer.TransactionAnalysisResultProducer;
 import com.sentinelai.fraudanalyzerservice.service.FraudAnalysisService;
 
 import lombok.RequiredArgsConstructor;
@@ -15,8 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class TransactionConsumer {
+	
+	@Autowired
+	TransactionAnalysisResultProducer transactionAnalysisResultProducer;
+	
 	private final FraudAnalysisService fraudAnalysisService;
-
+	
 	private final KafkaTemplate<String, FraudCheckResponse> kafkaTemplate;
 	@KafkaListener(
 	        topics = "transaction-events", 
@@ -28,7 +34,9 @@ public class TransactionConsumer {
 	        FraudCheckResponse result = fraudAnalysisService.analyzeWithAI(request);
 	        
 	        result.setTransactionId(request.getTransactionId());
-	        kafkaTemplate.send("fraud-results", result.getTransactionId(), result);
+	        
+	        transactionAnalysisResultProducer.sendTransactionAnalysisResult(result);
+//	        kafkaTemplate.send("fraud-results", result.getTransactionId(), result);
 	        log.info("Sent result back for: {}", result.getTransactionId());
 	        
 	    }
